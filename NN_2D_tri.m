@@ -1,4 +1,4 @@
-% a demo of nearest neighbor 2D Kuramoto model
+% a demo of nearest neighbor 2D Kuramoto model with triangular lattice
 
 clear;
 % close all;
@@ -53,5 +53,7 @@ y = x + dt*(c1+2*c2+2*c3+c4)/6;
 end
 
 function y = coeff(x,omega,fact)
-y = omega - fact*(sin(x-circshift(x,1)) + sin(x-circshift(x,-1)) + sin(x-circshift(x,1,2)) + sin(x-circshift(x,-1,2)));
+y = omega - fact*(sin(x-circshift(x,1)) + sin(x-circshift(x,-1)) ...
+    + sin(x-circshift(x,1,2)) + sin(x-circshift(x,-1,2)) ...
+    + sin(x-circshift(x,[1 1])) + sin(x-circshift(x,[-1 -1])));
 end

@@ -1,4 +1,4 @@
-% a demo of nearest neighbor 2D Kuramoto model
+% a demo of nearest neighbor 3D Kuramoto model
 
 clear;
 % close all;
@@ -10,13 +10,13 @@ myseed = 1;
 rng(myseed)
 
 %% parameter
-L = 20;
-K_all = 0:1:10;
+L = 12;
+K_all = 0:0.2:2;
 nK = length(K_all);
-omega = randn(L);
-theta0 = 2*pi*rand(L);
-T = 500;
-dt = 5e-3;
+omega = randn(L,L,L);
+theta0 = 2*pi*rand(L,L,L);
+T = 100;
+dt = 1e-2;
 t = 0:dt:T;
 nt = length(t);
 order = zeros(nK,nt);
@@ -24,11 +24,11 @@ order = zeros(nK,nt);
 %% time evolition
 for n = 1:nK
     theta = theta0;
-    order(n,1) = abs(sum(exp(1i*theta),"all"))/L^2;
+    order(n,1) = abs(sum(exp(1i*theta),"all"))/L^3;
     K = K_all(n);
     for i = 2:nt
         theta = myrunge(theta,dt,omega,K);
-        order(n,i) = abs(sum(exp(1i*theta),"all"))/L^2;
+        order(n,i) = abs(sum(exp(1i*theta),"all"))/L^3;
     end
 end
 
@@ -53,5 +53,7 @@ y = x + dt*(c1+2*c2+2*c3+c4)/6;
 end
 
 function y = coeff(x,omega,fact)
-y = omega - fact*(sin(x-circshift(x,1)) + sin(x-circshift(x,-1)) + sin(x-circshift(x,1,2)) + sin(x-circshift(x,-1,2)));
+y = omega - fact*(sin(x-circshift(x,1)) + sin(x-circshift(x,-1)) ...
+    + sin(x-circshift(x,1,2)) + sin(x-circshift(x,-1,2)) ...
+    + sin(x-circshift(x,1,3)) + sin(x-circshift(x,-1,3)));
 end
