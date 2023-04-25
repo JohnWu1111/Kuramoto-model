@@ -13,7 +13,8 @@ rng(myseed)
 L = 12;
 K_all = 0:0.2:2;
 nK = length(K_all);
-omega = randn(L,L,L);
+% omega = randn(L,L,L);
+omega = rand(L,L,L);
 theta0 = 2*pi*rand(L,L,L);
 T = 100;
 dt = 1e-2;
@@ -21,7 +22,7 @@ t = 0:dt:T;
 nt = length(t);
 order = zeros(nK,nt);
 
-%% time evolition
+%% time evolution
 for n = 1:nK
     theta = theta0;
     order(n,1) = abs(sum(exp(1i*theta),"all"))/L^3;

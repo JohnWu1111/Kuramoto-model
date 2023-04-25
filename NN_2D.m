@@ -10,18 +10,18 @@ myseed = 1;
 rng(myseed)
 
 %% parameter
-L = 20;
-K_all = 0:1:10;
+L = 30;
+K_all = 0:0.3:3;
 nK = length(K_all);
-omega = randn(L);
+omega = rand(L);
 theta0 = 2*pi*rand(L);
-T = 500;
-dt = 5e-3;
+T = 300;
+dt = 1e-2;
 t = 0:dt:T;
 nt = length(t);
 order = zeros(nK,nt);
 
-%% time evolition
+%% time evolution
 for n = 1:nK
     theta = theta0;
     order(n,1) = abs(sum(exp(1i*theta),"all"))/L^2;

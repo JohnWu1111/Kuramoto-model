@@ -1,4 +1,4 @@
-% a demo of nearest neighbor 2D Kuramoto model with triangular lattice
+% a demo of nearest neighbor 3D Kuramoto model
 
 clear;
 % close all;
@@ -10,36 +10,32 @@ myseed = 1;
 rng(myseed)
 
 %% parameter
-L = 20;
-K_all = 0:1:10;
-nK = length(K_all);
-omega = randn(L);
-theta0 = 2*pi*rand(L);
-T = 500;
-dt = 5e-3;
+L = 10;
+K = 0.5;
+delta = 0.5;
+w = 0.1;
+omega = randn(L,L,L);
+theta0 = 2*pi*rand(L,L,L);
+T = 100;
+dt = 1e-2;
 t = 0:dt:T;
 nt = length(t);
-order = zeros(nK,nt);
+order = zeros(1,nt);
 
 %% time evolution
-for n = 1:nK
-    theta = theta0;
-    order(n,1) = abs(sum(exp(1i*theta),"all"))/L^2;
-    K = K_all(n);
-    for i = 2:nt
-        theta = myrunge(theta,dt,omega,K);
-        order(n,i) = abs(sum(exp(1i*theta),"all"))/L^2;
-    end
+theta = theta0;
+order(1) = abs(sum(exp(1i*theta),"all"))/L^3;
+for i = 2:nt
+    theta = myrunge(theta,dt,omega,(K+delta*cos(2*pi*w*t(i))));
+    order(i) = abs(sum(exp(1i*theta),"all"))/L^3;
 end
 
 %% analysis and plot
 order_mean = mean(order(:,floor(nt/2):end),2);
 
 figure;
-subplot(2,1,1)
 plot(t,order)
-subplot(2,1,2)
-plot(K_all,order_mean)
+
 
 toc;
 
@@ -55,5 +51,5 @@ end
 function y = coeff(x,omega,fact)
 y = omega - fact*(sin(x-circshift(x,1)) + sin(x-circshift(x,-1)) ...
     + sin(x-circshift(x,1,2)) + sin(x-circshift(x,-1,2)) ...
-    + sin(x-circshift(x,[1 1])) + sin(x-circshift(x,[-1 -1])));
+    + sin(x-circshift(x,1,3)) + sin(x-circshift(x,-1,3)));
 end

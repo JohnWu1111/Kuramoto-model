@@ -10,10 +10,10 @@ myseed = 1;
 rng(myseed)
 
 %% parameter
-L = 1000;
+L = 500;
 K_all = 1:1:10;
 nK = length(K_all);
-omega = randn(L,1);
+omega = rand(L,1);
 theta0 = 2*pi*rand(L,1);
 T = 100;
 dt = 1e-2;
@@ -23,7 +23,7 @@ theta = zeros(L,nt);
 theta(:,1) = theta0;
 order = zeros(nK,nt);
 
-%% time evolition
+%% time evolution
 for n = 1:nK
     K = K_all(n);
     for i = 2:nt
